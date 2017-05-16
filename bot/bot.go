@@ -6,6 +6,10 @@ import (
 
 	"strings"
 
+	"bytes"
+
+	"regexp"
+
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -37,12 +41,29 @@ func Start() {
 }
 
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+	var salida bytes.Buffer
+	var ok bool
+
 	if strings.HasPrefix(m.Content, config.BotPrefix) {
 		if m.Author.ID == BotID {
 			return
 		}
-		if m.Content == "!prueba" {
-			_, _ = s.ChannelMessageSend(m.ChannelID, "probando probando 123")
+		//var expresion = regexp.MustCompile(`!info\s.*`)
+		ok, _ = regexp.MatchString(`!info\s.*`, m.Content)
+		if ok == true {
+			salida.WriteString("Author: ")
+			salida.WriteString(m.Author.String())
+			salida.WriteString("\n")
+			salida.WriteString("UserName: ")
+			salida.WriteString(m.Author.Username)
+			salida.WriteString("\n")
+			salida.WriteString("ID: ")
+			salida.WriteString(m.Author.ID)
+			salida.WriteString("\n")
+			salida.WriteString("Mensaje: ")
+			salida.WriteString(m.Content)
+			salida.WriteString("\n")
+			_, _ = s.ChannelMessageSend(m.ChannelID, salida.String())
 			//_, _ = s.ChannelMessageSend("314110449824301056", "probando probando 123")
 		}
 	}
