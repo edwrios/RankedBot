@@ -4,6 +4,9 @@ import (
 	"RankedBot/bot"
 	"RankedBot/config"
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 func main() {
@@ -15,6 +18,10 @@ func main() {
 	}
 
 	bot.Start()
-	<-make(chan struct{})
+
+	//<-make(chan struct{})
+	sc := make(chan os.Signal, 1)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	<-sc
 	return
 }
