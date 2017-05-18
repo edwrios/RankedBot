@@ -100,21 +100,22 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 					_, _ = s.ChannelMessageSend(m.ChannelID, err.Error())
 					return
 				}
-				/*
-					for i := range ReadyLista {
-						if ReadyLista[i].Author == m.Author.String() {
-							ReadyLista = append(ReadyLista[:i], ReadyLista[:i+1]...)
-							break
-						}
-					}
-				*/
-				for i := len(ReadyLista) - 1; i >= 0; i-- {
-					//actual := ReadyLista[i]
+
+				for i := range ReadyLista {
 					if ReadyLista[i].Author == m.Author.String() {
-						ReadyLista = append(ReadyLista[i:], ReadyLista[i+1:]...)
-						fmt.Println("encontrado: " + ReadyLista[i].Author)
+						ReadyLista = append(ReadyLista[:i], ReadyLista[i+1:]...)
+						//break
 					}
 				}
+				/*
+					for i := len(ReadyLista) - 1; i >= 0; i-- {
+						//actual := ReadyLista[i]
+						if ReadyLista[i].Author == m.Author.String() {
+							ReadyLista = append(ReadyLista[:i], ReadyLista[i+1:]...)
+							fmt.Println("encontrado: " + ReadyLista[i].Author)
+
+						}
+					}*/
 				_, _ = s.ChannelMessageSend(m.ChannelID, "<@"+m.Author.ID+"> ya no aceptará más retos.")
 			}
 		}
@@ -146,11 +147,18 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		ok, _ = regexp.MatchString(`!l`, m.Content)
 		if ok {
-			//Listar jugadores listos
-			for i := 0; i < len(ReadyLista); i++ {
-				fmt.Println(ReadyLista[i].Username + " " + ReadyLista[i].Nick + " " + ReadyLista[i].Author)
+			if len(ReadyLista) == 0 {
+				_, _ = s.ChannelMessageSend(m.ChannelID, "No hay jugadores disponibles para ranked.")
+			} else {
+				printLista := ""
+				//Listar jugadores listos
+				for i := 0; i < len(ReadyLista); i++ {
+					fmt.Println(ReadyLista[i].Username + " " + ReadyLista[i].Nick + " " + ReadyLista[i].Author)
+					printLista = printLista + ReadyLista[i].Username + " " + ReadyLista[i].Nick + " " + ReadyLista[i].Author + "\n"
+				}
+				fmt.Println()
+				_, _ = s.ChannelMessageSend(m.ChannelID, printLista)
 			}
-			fmt.Println()
 		}
 
 	}
