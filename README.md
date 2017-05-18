@@ -1,14 +1,14 @@
 # RankedBot
 Bot para discord desarrollado en go(golang). Implementación para ranked matches SSBM para el grupo de discord "Super Smash Bros Melee + Pm +64".
 
-# Version
+## Version
 0.0.1 (alpha). Para tener la última actualización (experimental) referirse a la rama "desarrollo".
 
-# Requerimientos
+## Requerimientos
 - Descargar el compilador de go en https://golang.org/dl/.
 - Se necesita la librería "discordgo" para go. Descarga en https://github.com/bwmarrin/discordgo.
 
-# Comandos
+## Comandos
 - !r (ready). Listo para aceptar ranked matches.
 - !nr (not ready). Ya no acepta mas retos.
 - !l (list). Listar jugadores disponibles.
